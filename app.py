@@ -5,12 +5,17 @@ from PIL import Image
 
 st.title("Brain Tumor Detection")
 
-model = load_model("BrainTumor.h5")
+@st.cache_resource
+def load_ai_model():
+    model = load_model("BrainTumor.h5")
+    return model
 
-uploaded_file = st.file_uploader("Upload MRI Image", type=["jpg","png","jpeg"])
+model = load_ai_model()
+
+uploaded_file = st.file_uploader("Upload MRI Image", type=["jpg","jpeg","png"])
 
 if uploaded_file is not None:
-    img = Image.open(uploaded_file)
+    img = Image.open(uploaded_file).convert("RGB")
     st.image(img)
 
     img = img.resize((224,224))
@@ -20,6 +25,6 @@ if uploaded_file is not None:
     prediction = model.predict(img_array)
 
     if prediction[0][0] > 0.5:
-        st.write("Brain Tumor Detected")
+        st.error("Brain Tumor Detected")
     else:
-        st.write("No Brain Tumor Detected")
+        st.success("No Brain Tumor Detected")
