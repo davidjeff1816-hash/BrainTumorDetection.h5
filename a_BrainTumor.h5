@@ -1,4 +1,0 @@
-import gdown
-
-url = "MODEL_DOWNLOAD_LINK"
-gdown.download(url, "a_BrainTumor.h5", quiet=False)
