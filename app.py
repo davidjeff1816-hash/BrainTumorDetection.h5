@@ -3,18 +3,15 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-st.title("Brain Tumor Detection using AI")
+st.title("Brain Tumor Detection")
 
 model = load_model("BrainTumor.h5")
 
-st.write("Upload an MRI scan image to detect if a brain tumor is present.")
-
-uploaded_file = st.file_uploader("Upload MRI Image", type=["jpg","jpeg","png"])
+uploaded_file = st.file_uploader("Upload MRI Image", type=["jpg","png","jpeg"])
 
 if uploaded_file is not None:
-
-    img = Image.open(uploaded_file).convert("RGB")
-    st.image(img, caption="Uploaded Image", use_column_width=True)
+    img = Image.open(uploaded_file)
+    st.image(img)
 
     img = img.resize((224,224))
     img_array = np.array(img)/255.0
@@ -23,6 +20,6 @@ if uploaded_file is not None:
     prediction = model.predict(img_array)
 
     if prediction[0][0] > 0.5:
-        st.error("Brain Tumor Detected")
+        st.write("Brain Tumor Detected")
     else:
-        st.success("No Brain Tumor Detected")
+        st.write("No Brain Tumor Detected")
